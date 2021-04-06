@@ -10,6 +10,7 @@ import 'package:kar_administration/Components/MainDialog.dart';
 import 'package:kar_administration/Components/MainTextField.dart';
 import 'package:kar_administration/Helpers/Database.dart';
 import 'package:kar_administration/Models/Person.dart';
+import 'package:kar_administration/Models/Thing.dart';
 
 import 'package:path/path.dart' as syspaths;
 import 'package:path_provider/path_provider.dart';
@@ -25,6 +26,7 @@ class AddThingScreen extends StatefulWidget {
 class _AddThingScreenState extends State<AddThingScreen> {
   bool isLoading = false;
   bool isPickedUp = false;
+  bool cashValue = true;
 
   var nameController = TextEditingController();
   var costController = TextEditingController();
@@ -40,7 +42,6 @@ class _AddThingScreenState extends State<AddThingScreen> {
   };
 
   final _formKey = GlobalKey<FormState>();
-
 
   DateTime selectedDate = DateTime.now().subtract(Duration(days: 6570));
 
@@ -62,7 +63,6 @@ class _AddThingScreenState extends State<AddThingScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +70,7 @@ class _AddThingScreenState extends State<AddThingScreen> {
         title: Text(
           "Add Thing",
           style:
-          AppTextStyle.regularTitle20.copyWith(fontWeight: FontWeight.bold),
+              AppTextStyle.regularTitle20.copyWith(fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         centerTitle: true,
@@ -116,7 +116,6 @@ class _AddThingScreenState extends State<AddThingScreen> {
                       SizedBox(
                         height: 15,
                       ),
-
                       MainTextField(
                         onChanged: (text) {
                           dataMap["cost"] = text;
@@ -135,7 +134,32 @@ class _AddThingScreenState extends State<AddThingScreen> {
                       SizedBox(
                         height: 10,
                       ),
-
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            children: [
+                              Text(
+                                "cash ?",
+                                style: AppTextStyle.regularTitle14
+                                    .copyWith(fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              CupertinoSwitch(
+                                value: cashValue,
+                                onChanged: (value) {
+                                  setState(() {
+                                    cashValue = value;
+                                  });
+                                },
+                              ),
+                            ],
+                          )),
+                      SizedBox(
+                        height: 10,
+                      ),
                       MainTextField(
                         onChanged: (text) {
                           dataMap["note"] = text;
@@ -162,9 +186,9 @@ class _AddThingScreenState extends State<AddThingScreen> {
                           children: [
                             isPickedUp
                                 ? Icon(
-                              Icons.done,
-                              color: ColorConstants.mainAppColor,
-                            )
+                                    Icons.done,
+                                    color: ColorConstants.mainAppColor,
+                                  )
                                 : SizedBox.shrink(),
                             InkWell(
                               onTap: () async {
@@ -174,10 +198,10 @@ class _AddThingScreenState extends State<AddThingScreen> {
                                 children: [
                                   isPickedUp
                                       ? Text(
-                                    "(${DateFormat('dd-MM-yyyy').format(selectedDate)})",
-                                    style: AppTextStyle.thinTitle14,
-                                    textAlign: TextAlign.left,
-                                  )
+                                          "(${DateFormat('dd-MM-yyyy').format(selectedDate)})",
+                                          style: AppTextStyle.thinTitle14,
+                                          textAlign: TextAlign.left,
+                                        )
                                       : SizedBox.shrink(),
                                   SizedBox(
                                     width: 4,
@@ -252,41 +276,39 @@ class _AddThingScreenState extends State<AddThingScreen> {
     }
     _formKey.currentState.save();
 
-    // if (!isUploaded) {
-    //   showMainDialog(
-    //       context: context,
-    //       label: "Warning !",
-    //       content: "Your picture is Missing ! \n Please Upload a picture ");
-    // } else {
-    //   try {
-    //     DBProvider.db.newPerson(Person(
-    //         salary: int.parse(dataMap["salary"]),
-    //         firstName: dataMap["firstName"],
-    //         secondName: dataMap["secondName"],
-    //         description: dataMap["description"],
-    //         image: dataMap["image"]
-    //     ));
-    //
-    //     setState(() {
-    //       salaryController.clear();
-    //       FNameController.clear();
-    //       SNameController.clear();
-    //       descriptionController.clear();
-    //       isUploaded = false;
-    //     });
-    //     showMainDialog(
-    //         context: context,
-    //         label: "Congrats !",
-    //         content: "Registration Success! \n Thank you");
-    //     Timer(Duration(seconds: 2), () {
-    //       Navigator.pushNamed(context, "/home");
-    //     });
-    //   } catch (err) {
-    //     showMainDialog(
-    //         context: context,
-    //         label: "Warning !",
-    //         content: err.toString());
-    //   }
-    // }
+    if (!isPickedUp) {
+      showMainDialog(
+          context: context,
+          label: "Warning !",
+          content: "Your sate is missing ! \n Please select a date ");
+    } else {
+      try {
+        DBProvider.db.newThing(Thing(
+          name: dataMap["name"],
+          cost: int.parse(dataMap["cost"]),
+          note: dataMap["note"],
+          date: dataMap["date"].toString(),
+          // projectWork: dataMap["projectWork"],
+          isCash: cashValue ? 1 : 0,
+        ));
+
+        setState(() {
+          nameController.clear();
+          costController.clear();
+          noteController.clear();
+          isPickedUp = false;
+        });
+        showMainDialog(
+            context: context,
+            label: "Congrats !",
+            content: "Registration Success! \n Thank you");
+        Timer(Duration(seconds: 2), () {
+          Navigator.pushNamed(context, "/home");
+        });
+      } catch (err) {
+        showMainDialog(
+            context: context, label: "Warning !", content: err.toString());
+      }
+    }
   }
 }

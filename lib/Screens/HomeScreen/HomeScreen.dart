@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
         children: <Widget>[
           GestureDetector(
-            onTap: ()=>Navigator.pushNamed(context, "/addProject"),
+            onTap: ()=>Navigator.pushNamed(context, "/projects"),
             child: Card(
               margin: EdgeInsets.all(12),
               shape: RoundedRectangleBorder(
@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           GestureDetector(
-            onTap: ()=>Navigator.pushNamed(context, "/addPerson"),
+            onTap: ()=>Navigator.pushNamed(context, "/persons"),
             child: Card(
               margin: EdgeInsets.all(12),
               shape: RoundedRectangleBorder(
@@ -171,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           GestureDetector(
-            onTap: ()=>Navigator.pushNamed(context, "/addThing"),
+            onTap: ()=>Navigator.pushNamed(context, "/things"),
             child: Card(
               margin: EdgeInsets.all(12),
               shape: RoundedRectangleBorder(

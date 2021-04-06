@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:kar_administration/Components/MainAppButton.dart';
+import 'package:kar_administration/Components/MainDialog.dart';
 import 'package:kar_administration/Components/MainTextField.dart';
+import 'package:kar_administration/Helpers/Database.dart';
+import 'package:kar_administration/Models/Project.dart';
 
 
 import 'package:path/path.dart' as syspaths;
@@ -212,7 +215,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                         },
                         iconData: Icons.phone_iphone,
                         hint: "Owner Number",
-                        controller: ownerNameController,
+                        controller: ownerNumberController,
                       ),
 
                       SizedBox(
@@ -374,79 +377,51 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
       return;
     }
     _formKey.currentState.save();
-    //
-    // String deviceName="";
-    // DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    //
-    // if(Platform.isAndroid){
-    //   AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    //   deviceName="Android : ${androidInfo.model.toString()}";
-    // }else if (Platform.isIOS){
-    //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-    //   deviceName="IOS : ${iosInfo.model.toString()}";
-    // }else{
-    //   deviceName="Nor Android & Nor IOS";
-    // }
-    //
-    // var loc = Provider.of<LocationProvider>(context,listen: false);
-    // dataMap["lat"] = loc.latitude;
-    // dataMap["lng"] = loc.longitude;
-    //
-    //
-    // if (!isUploaded) {
-    //   showMainDialog(
-    //       context: context,
-    //       label: "Warning !",
-    //       content: "Your picture is Missing ! \n Please Upload a picture ");
-    // } else if (!isPickedUp) {
-    //   showMainDialog(
-    //       context: context,
-    //       label: "Warning !",
-    //       content: "Your Date Of Birth is Missing ! \n PleaseSelect a Date ");
-    // } else {
-    //   if (selectedDate
-    //       .isBefore(DateTime.now().subtract(Duration(days: 6575)))) {
-    //     try {
-    //       DBProvider.db.newUser(User(
-    //           IMEI: int.parse(dataMap["IMEI"]),
-    //           firstName: dataMap["first_name"],
-    //           lastName: dataMap["last_name"],
-    //           doB: dataMap["doB"],
-    //           passport: int.parse(dataMap["passport"]),
-    //           email: dataMap["email"],
-    //           picture: dataMap["picture"].toString(),
-    //           deviceName: "deviceName",
-    //           lat: dataMap["lat"],
-    //           isActive: dataMap["lat"]));
-    //
-    //       setState(() {
-    //         IMEIController.clear();
-    //         FNameController.clear();
-    //         LNameController.clear();
-    //         emailController.clear();
-    //         passportController.clear();
-    //         isUploaded = false;
-    //         isPickedUp = false;
-    //       });
-    //       showMainDialog(
-    //           context: context,
-    //           label: "Congrats !",
-    //           content: "Registration Success! \n Thank you");
-    //       Timer(Duration(seconds: 2), () {
-    //         Navigator.pushNamed(context, "/home");
-    //       });
-    //     } catch (err) {
-    //       showMainDialog(
-    //           context: context,
-    //           label: "Warning !",
-    //           content: "Registration failed! \n Try Input Valid Information");
-    //     }
-    //   } else {
-    //     showMainDialog(
-    //         context: context,
-    //         label: "You are -18 !",
-    //         content: "You are below 18 years old ! \n Sorry come back later ");
-    //   }
-    // }
+
+    if (!isUploaded) {
+      showMainDialog(
+          context: context,
+          label: "Warning !",
+          content: "Your picture is Missing ! \n Please Upload a picture ");
+    } else {
+      try {
+        DBProvider.db.newProject(Project(
+            name: dataMap["name"],
+            location: dataMap["location"],
+            cost: int.parse(dataMap["cost"]),
+            detail: dataMap["detail"],
+            ownerName: dataMap["ownerName"],
+            ownerNumber: int.parse(dataMap["ownerNumber"]),
+            image: dataMap["image"],
+            startDate: dataMap["startDate"].toString(),
+            isActive: 1
+            // days: dataMap["days"]
+        ));
+
+
+        setState(() {
+          nameController.clear();
+          locationController.clear();
+          costController.clear();
+          detailController.clear();
+          ownerNameController.clear();
+          ownerNumberController.clear();
+          isUploaded = false;
+          isPickedUp = false;
+        });
+        showMainDialog(
+            context: context,
+            label: "Congrats !",
+            content: "Registration Success! \n Thank you");
+        Timer(Duration(seconds: 2), () {
+          Navigator.pushNamed(context, "/home");
+        });
+      } catch (err) {
+        showMainDialog(
+            context: context,
+            label: "Warning !",
+            content: err.toString());
+      }
+    }
   }
 }

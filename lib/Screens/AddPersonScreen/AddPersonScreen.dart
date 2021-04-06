@@ -328,7 +328,7 @@ class _AddPersonScreenState extends State<AddPersonScreen> {
             firstName: dataMap["firstName"],
             secondName: dataMap["secondName"],
             description: dataMap["description"],
-            image: dataMap["image"]
+            image: dataMap["image"],
         ));
 
         setState(() {

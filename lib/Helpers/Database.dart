@@ -93,8 +93,8 @@ class DBProvider {
     // var table = await db.rawQuery("SELECT MAX(id)+1 as id FROM User");
     // int id = table.first["id"];
     var res = await db.rawInsert(
-        "INSERT Into Project (name,location,startDate,cost,detail,image,ownerName,ownerNumber,days,isActive)"
-        " VALUES (?,?,?,?,?,?,?,?,?,?)",
+        "INSERT Into Project (name,location,startDate,cost,detail,image,ownerName,ownerNumber,isActive)"
+        " VALUES (?,?,?,?,?,?,?,?,?)",
         [
           obj.name,
           obj.location,
@@ -104,7 +104,6 @@ class DBProvider {
           obj.image,
           obj.ownerName,
           obj.ownerNumber,
-          obj.days,
           obj.isActive
         ]);
     return res;
@@ -148,13 +147,12 @@ class DBProvider {
     // var table = await db.rawQuery("SELECT MAX(id)+1 as id FROM User");
     // int id = table.first["id"];
     var res = await db.rawInsert(
-        "INSERT Into Thing (name,cost,date,projectWork,note,isCash)"
-        " VALUES (?,?,?,?,?,?)",
+        "INSERT Into Thing (name,cost,date,note,isCash)"
+        " VALUES (?,?,?,?,?)",
         [
           obj.name,
           obj.cost,
           obj.date,
-          obj.projectWork,
           obj.note,
           obj.isCash,
         ]);

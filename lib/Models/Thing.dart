@@ -14,35 +14,37 @@ class Thing {
   int id;
   String name;
   int cost;
-  DateTime date;
-  Map<String,dynamic> projectWork;
+  String date;
+  // Map<String,dynamic> projectWork;
   String note;
-  bool isCash;
+  int isCash;
 
   Thing(
       {this.id,
       this.name,
       this.cost,
       this.date,
-      this.projectWork,
+      // this.projectWork,
       this.note,
-      this.isCash});
+      this.isCash
+      });
 
   factory Thing.fromMap(Map<String, dynamic> json) => new Thing(
       id: json["id"],
       name: json["name"],
       cost: json["cost"],
       date: json["date"],
-      projectWork: json["projectWork"],
+      // projectWork: json["projectWork"],
       note: json["note"],
-      isCash: json["isCash"]);
+      isCash: json["isCash"]
+      );
 
   Map<String, dynamic> toMap() => {
         "id": id,
         "name": name,
         "cost": cost,
         "date": date,
-        "projectWork": projectWork,
+        // "projectWork": projectWork,
         "note": note,
         "isCash": isCash
       };

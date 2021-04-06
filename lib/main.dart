@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:kar_administration/Screens/AddProjectScreen/AddProjectScreen.dart';
 import 'package:kar_administration/Screens/AddthingScreen/AddThingScreen.dart';
+import 'package:kar_administration/Screens/ProjectsScreen/ProjectsScreen.dart';
+import 'package:kar_administration/Screens/ThingsScreen/ThingsScreen.dart';
 import 'package:provider/provider.dart';
-
 import 'Constants.dart';
 import 'Providers/LocationProvider.dart';
 import 'Screens/AddPersonScreen/AddPersonScreen.dart';
 import 'Screens/HomeScreen/HomeScreen.dart';
+import 'Screens/PersonsScreen/PersonsScreen.dart';
 import 'Screens/SplashScreen/SplashScreen.dart';
 
 void main() => runApp(MyApp());
@@ -43,6 +45,9 @@ class _MyAppState extends State<MyApp> {
           '/addPerson': (context) => AddPersonScreen(),
           '/addProject': (context) => AddProjectScreen(),
           '/addThing': (context) => AddThingScreen(),
+          '/projects': (context) => ProjectsScreen(),
+          '/persons': (context) => PersonsScreen(),
+          '/things': (context) => ThingsScreen(),
         },
       ),
     );
