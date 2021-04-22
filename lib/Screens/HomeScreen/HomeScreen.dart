@@ -151,23 +151,26 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          Card(
-            margin: EdgeInsets.all(12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            color: ColorConstants.secondAppColor,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  IconConstants.day,
-                  color: Colors.white,
-                  width: 60,
-                ),
-                SizedBox(height: 10,),
-                Text("Days",style: AppTextStyle.boldTitle16.copyWith(color: Colors.white),)
-              ],
+          GestureDetector(
+            onTap: ()=>Navigator.pushNamed(context, "/days"),
+            child: Card(
+              margin: EdgeInsets.all(12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              color: ColorConstants.secondAppColor,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    IconConstants.day,
+                    color: Colors.white,
+                    width: 60,
+                  ),
+                  SizedBox(height: 10,),
+                  Text("Days",style: AppTextStyle.boldTitle16.copyWith(color: Colors.white),)
+                ],
+              ),
             ),
           ),
           GestureDetector(

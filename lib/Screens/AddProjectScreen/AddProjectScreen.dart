@@ -45,7 +45,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
     "ownerName": "",
     "ownerNumber": 0,
     "days": "",
-    "isActive": true
+    "isActive": 1
   };
 
 
@@ -394,8 +394,8 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
             ownerNumber: int.parse(dataMap["ownerNumber"]),
             image: dataMap["image"],
             startDate: dataMap["startDate"].toString(),
-            // isActive: 1
-            // days: dataMap["days"]
+            days: dataMap["days"],
+            isActive: 1
         ));
 
 

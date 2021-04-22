@@ -20,8 +20,8 @@ class Project {
   String image;
   String ownerName;
   int ownerNumber;
-  // List<Map<String,dynamic>> days;
-  // int isActive;
+  String days;
+  int isActive;
 
   Project(
       {this.id,
@@ -33,8 +33,8 @@ class Project {
       this.image,
       this.ownerName,
       this.ownerNumber,
-      // this.days,
-      // this.isActive
+      this.days,
+      this.isActive
       });
 
   factory Project.fromMap(Map<String, dynamic> json) => new Project(
@@ -47,8 +47,8 @@ class Project {
       image: json["image"],
       ownerName: json["ownerName"],
       ownerNumber: json["ownerNumber"],
-      // days: json["days"],
-      // isActive: json["isActive"]
+      days: json["days"],
+      isActive: json["isActive"]
   );
 
   Map<String, dynamic> toMap() => {
@@ -61,7 +61,7 @@ class Project {
         "image": image,
         "ownerName": ownerName,
         "ownerNumber": ownerNumber,
-        // "days": days,
-        // "isActive": isActive
+        "days": days,
+        "isActive": isActive
       };
 }

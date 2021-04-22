@@ -15,7 +15,7 @@ class Thing {
   String name;
   int cost;
   String date;
-  // Map<String,dynamic> projectWork;
+  // Map<dynamic,dynamic> projectWork;
   String note;
   int isCash;
 

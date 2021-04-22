@@ -46,7 +46,9 @@ class DBProvider {
         "detail TEXT,"
         "image TEXT,"
         "ownerName TEXT,"
-        "ownerNumber INTEGER"
+        "ownerNumber INTEGER,"
+        "days TEXT,"
+        "isActive BOOLEAN"
         ")");
   }
 
@@ -91,8 +93,8 @@ class DBProvider {
     // var table = await db.rawQuery("SELECT MAX(id)+1 as id FROM User");
     // int id = table.first["id"];
     var res = await db.rawInsert(
-        "INSERT Into Project (name,location,startDate,cost,detail,image,ownerName,ownerNumber)"
-        " VALUES (?,?,?,?,?,?,?,?)",
+        "INSERT Into Project (name,location,startDate,cost,detail,image,ownerName,ownerNumber,days,isActive)"
+        " VALUES (?,?,?,?,?,?,?,?,?,?)",
         [
           obj.name,
           obj.location,
@@ -101,7 +103,9 @@ class DBProvider {
           obj.detail,
           obj.image,
           obj.ownerName,
-          obj.ownerNumber
+          obj.ownerNumber,
+          obj.days,
+          obj.isActive
         ]);
     return res;
   }

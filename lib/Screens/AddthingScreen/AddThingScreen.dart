@@ -38,7 +38,7 @@ class _AddThingScreenState extends State<AddThingScreen> {
     "date": DateTime.now(),
     "projectWork": "",
     "note": "",
-    "isCash": true,
+    "isCash": 1,
   };
 
   final _formKey = GlobalKey<FormState>();
