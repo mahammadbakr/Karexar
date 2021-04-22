@@ -21,7 +21,7 @@ class Project {
   String ownerName;
   int ownerNumber;
   // List<Map<String,dynamic>> days;
-  int isActive;
+  // int isActive;
 
   Project(
       {this.id,
@@ -34,7 +34,8 @@ class Project {
       this.ownerName,
       this.ownerNumber,
       // this.days,
-      this.isActive});
+      // this.isActive
+      });
 
   factory Project.fromMap(Map<String, dynamic> json) => new Project(
       id: json["id"],
@@ -47,7 +48,8 @@ class Project {
       ownerName: json["ownerName"],
       ownerNumber: json["ownerNumber"],
       // days: json["days"],
-      isActive: json["isActive"]);
+      // isActive: json["isActive"]
+  );
 
   Map<String, dynamic> toMap() => {
         "id": id,
@@ -60,6 +62,6 @@ class Project {
         "ownerName": ownerName,
         "ownerNumber": ownerNumber,
         // "days": days,
-        "isActive": isActive
+        // "isActive": isActive
       };
 }

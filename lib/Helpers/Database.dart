@@ -46,9 +46,7 @@ class DBProvider {
         "detail TEXT,"
         "image TEXT,"
         "ownerName TEXT,"
-        "ownerNumber TEXT,"
-        "days TEXT,"
-        "isActive BOOLEAN"
+        "ownerNumber INTEGER"
         ")");
   }
 
@@ -93,8 +91,8 @@ class DBProvider {
     // var table = await db.rawQuery("SELECT MAX(id)+1 as id FROM User");
     // int id = table.first["id"];
     var res = await db.rawInsert(
-        "INSERT Into Project (name,location,startDate,cost,detail,image,ownerName,ownerNumber,isActive)"
-        " VALUES (?,?,?,?,?,?,?,?,?)",
+        "INSERT Into Project (name,location,startDate,cost,detail,image,ownerName,ownerNumber)"
+        " VALUES (?,?,?,?,?,?,?,?)",
         [
           obj.name,
           obj.location,
@@ -103,8 +101,7 @@ class DBProvider {
           obj.detail,
           obj.image,
           obj.ownerName,
-          obj.ownerNumber,
-          obj.isActive
+          obj.ownerNumber
         ]);
     return res;
   }
@@ -191,6 +188,10 @@ class DBProvider {
     var res = await db.query("Project");
     List<Project> list =
         res.isNotEmpty ? res.map((c) => Project.fromMap(c)).toList() : [];
+
+    print("length");
+    print(list.length);
+
     return list;
   }
 

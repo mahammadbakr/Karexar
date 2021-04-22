@@ -24,8 +24,12 @@ class ProjectsScreen extends StatelessWidget {
       body: FutureBuilder<List<Project>>(
         future: DBProvider.db.getAllProjects(),
         builder: (BuildContext context, AsyncSnapshot<List<Project>> snapshot) {
+          print(snapshot.hasData);
+
           if (snapshot.hasData) {
+
             if (snapshot.data.isEmpty) {
+
               return Center(
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -49,6 +53,7 @@ class ProjectsScreen extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 Project item = snapshot.data[index];
 
+                print(item.name);
                 return Dismissible(
                   secondaryBackground: UnderScreenContainer(),
                   key: UniqueKey(),
