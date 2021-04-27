@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'Person.dart';
+
 Day dayFromJson(String str) {
   final jsonData = json.decode(str);
   return Day.fromMap(jsonData);
@@ -10,12 +12,22 @@ String dayToJson(Day data) {
   return json.encode(dyn);
 }
 
+
+List<Day> dayListFromJson(String data) {
+  return json.decode(data);
+}
+
+String dayListToJson(List<Day> data) {
+  return json.encode(data);
+}
+
+
 class Day {
   int id;
   DateTime date;
-  Map<String,dynamic> projectWork;
+  String projectWork;
   String note;
-  List<Map<String,dynamic>> persons;
+  String persons;
 
   Day(
       {this.id,

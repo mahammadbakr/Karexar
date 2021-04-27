@@ -10,6 +10,16 @@ String projectToJson(Project data) {
   return json.encode(dyn);
 }
 
+List<Project> projectListFromJson(String data) {
+  return json.decode(data);
+}
+
+String projectListToJson(List<Project> data) {
+  return json.encode(data);
+}
+
+
+
 class Project {
   int id;
   String name;

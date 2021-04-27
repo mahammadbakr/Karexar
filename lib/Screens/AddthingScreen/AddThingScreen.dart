@@ -10,6 +10,7 @@ import 'package:kar_administration/Components/MainDialog.dart';
 import 'package:kar_administration/Components/MainTextField.dart';
 import 'package:kar_administration/Helpers/Database.dart';
 import 'package:kar_administration/Models/Person.dart';
+import 'package:kar_administration/Models/Project.dart';
 import 'package:kar_administration/Models/Thing.dart';
 
 import 'package:path/path.dart' as syspaths;
@@ -27,6 +28,8 @@ class _AddThingScreenState extends State<AddThingScreen> {
   bool isLoading = false;
   bool isPickedUp = false;
   bool cashValue = true;
+
+  Project currentProject;
 
   var nameController = TextEditingController();
   var costController = TextEditingController();
@@ -131,9 +134,62 @@ class _AddThingScreenState extends State<AddThingScreen> {
                         hint: "Cost",
                         controller: costController,
                       ),
+
                       SizedBox(
                         height: 10,
                       ),
+
+                      FutureBuilder<List<Project>>(
+                        future: DBProvider.db.getAllProjects(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Project>> snapshot) {
+                          print(snapshot.hasData);
+
+                          if (snapshot.hasData) {
+                            if (snapshot.data.isEmpty) {
+                              return Center(
+                                  child: Text(
+                                    "Projects are Empty !",
+                                    style: AppTextStyle.boldTitle20.copyWith(
+                                        color: ColorConstants.blackAppColor),
+                                  ));
+                            }
+                            return Row(
+                              children: [
+                                Text("Select a Project : "),
+                                PopupMenuButton<Project>(
+                                    initialValue: currentProject == null
+                                        ? snapshot.data.first
+                                        : currentProject,
+                                    child: Text(currentProject == null
+                                        ? snapshot.data.first.name
+                                        : currentProject.name),
+                                    onSelected: (Project value) async {
+                                      setState(() {
+                                        currentProject = value;
+                                      });
+                                    },
+                                    itemBuilder: (BuildContext context) {
+                                      return snapshot.data
+                                          .map(
+                                            (i) => PopupMenuItem<Project>(
+                                            value: i,
+                                            child: Text(i.name.toString())),
+                                      )
+                                          .toList();
+                                    }),
+                              ],
+                            );
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        },
+                      ),
+
+                      SizedBox(
+                        height: 10,
+                      ),
+
                       Align(
                           alignment: Alignment.centerLeft,
                           child: Row(
@@ -288,7 +344,7 @@ class _AddThingScreenState extends State<AddThingScreen> {
           cost: int.parse(dataMap["cost"]),
           note: dataMap["note"],
           date: dataMap["date"].toString(),
-          // projectWork: dataMap["projectWork"],
+          projectWork: projectToJson(currentProject),
           isCash: cashValue ? 1 : 0,
         ));
 

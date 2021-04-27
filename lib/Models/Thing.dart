@@ -10,12 +10,23 @@ String thingToJson(Thing data) {
   return json.encode(dyn);
 }
 
+List<Thing>thingListFromJson(String data) {
+  return json.decode(data);
+}
+
+String thingListToJson(List<Thing> data) {
+  return json.encode(data);
+}
+
+
+
+
 class Thing {
   int id;
   String name;
   int cost;
   String date;
-  // Map<dynamic,dynamic> projectWork;
+  String projectWork;
   String note;
   int isCash;
 
@@ -24,7 +35,7 @@ class Thing {
       this.name,
       this.cost,
       this.date,
-      // this.projectWork,
+      this.projectWork,
       this.note,
       this.isCash
       });
@@ -34,7 +45,7 @@ class Thing {
       name: json["name"],
       cost: json["cost"],
       date: json["date"],
-      // projectWork: json["projectWork"],
+      projectWork: json["projectWork"],
       note: json["note"],
       isCash: json["isCash"]
       );
@@ -44,7 +55,7 @@ class Thing {
         "name": name,
         "cost": cost,
         "date": date,
-        // "projectWork": projectWork,
+        "projectWork": projectWork,
         "note": note,
         "isCash": isCash
       };

@@ -9,7 +9,9 @@ import 'package:kar_administration/Components/MainAppButton.dart';
 import 'package:kar_administration/Components/MainDialog.dart';
 import 'package:kar_administration/Components/MainTextField.dart';
 import 'package:kar_administration/Helpers/Database.dart';
+import 'package:kar_administration/Models/Day.dart';
 import 'package:kar_administration/Models/Person.dart';
+import 'package:kar_administration/Models/Project.dart';
 
 import 'package:path/path.dart' as syspaths;
 import 'package:path_provider/path_provider.dart';
@@ -26,16 +28,16 @@ class _AddDayScreenState extends State<AddDayScreen> {
   bool isLoading = false;
   bool isPickedUp = false;
 
+  Project currentProject;
+  List<Person> personsList;
   var noteController = TextEditingController();
 
   Map<String, dynamic> dataMap = {
-    "projectWork": "",
     "persons": "",
     "note": "",
   };
 
   final _formKey = GlobalKey<FormState>();
-
 
   DateTime selectedDate = DateTime.now().subtract(Duration(days: 6570));
 
@@ -57,7 +59,6 @@ class _AddDayScreenState extends State<AddDayScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +66,7 @@ class _AddDayScreenState extends State<AddDayScreen> {
         title: Text(
           "Add Day",
           style:
-          AppTextStyle.regularTitle20.copyWith(fontWeight: FontWeight.bold),
+              AppTextStyle.regularTitle20.copyWith(fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         centerTitle: true,
@@ -94,19 +95,99 @@ class _AddDayScreenState extends State<AddDayScreen> {
                         height: 15,
                       ),
 
-                      Row(
-                        children: [
-                          Text("Select a Project : "),
+                      FutureBuilder<List<Project>>(
+                        future: DBProvider.db.getAllProjects(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Project>> snapshot) {
+                          print(snapshot.hasData);
 
-                        ],
+                          if (snapshot.hasData) {
+                            if (snapshot.data.isEmpty) {
+                              return Center(
+                                  child: Text(
+                                    "Projects are Empty !",
+                                    style: AppTextStyle.boldTitle20.copyWith(
+                                        color: ColorConstants.blackAppColor),
+                                  ));
+                            }
+                            return Row(
+                              children: [
+                                Text("Select a Project : "),
+                                PopupMenuButton<Project>(
+                                    initialValue: currentProject == null
+                                        ? snapshot.data.first
+                                        : currentProject,
+                                    child: Text(currentProject == null
+                                        ? snapshot.data.first.name
+                                        : currentProject.name),
+                                    onSelected: (Project value) async {
+                                      setState(() {
+                                        currentProject = value;
+                                      });
+                                    },
+                                    itemBuilder: (BuildContext context) {
+                                      return snapshot.data
+                                          .map(
+                                            (i) => PopupMenuItem<Project>(
+                                                value: i,
+                                                child: Text(i.name.toString())),
+                                          )
+                                          .toList();
+                                    }),
+                              ],
+                            );
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        },
+                      ),
+                      FutureBuilder<List<Person>>(
+                        future: DBProvider.db.getAllPersons(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Person>> snapshot) {
+                          print(snapshot.hasData);
+
+                          if (snapshot.hasData) {
+                            if (snapshot.data.isEmpty) {
+                              return Center(
+                                  child: Text(
+                                    "Workers are Empty !",
+                                    style: AppTextStyle.boldTitle20.copyWith(
+                                        color: ColorConstants.blackAppColor),
+                                  ));
+                            }
+                            return Row(
+                              children: [
+                                Text("Select Workers : "),
+                                PopupMenuButton<Person>(
+                                    initialValue: personsList == null
+                                        ? snapshot.data.first
+                                        : personsList.first,
+                                    child: Text(personsList == null
+                                        ? snapshot.data.first.firstName
+                                        : personsList.first.firstName),
+                                    onSelected: (Person value) async {
+                                      setState(() {
+                                        personsList.add(value);
+                                      });
+                                    },
+                                    itemBuilder: (BuildContext context) {
+                                      return snapshot.data
+                                          .map(
+                                            (i) => PopupMenuItem<Person>(
+                                            value: i,
+                                            child: Text(i.firstName.toString())),
+                                      )
+                                          .toList();
+                                    }),
+                              ],
+                            );
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        },
                       ),
 
-                      Row(
-                        children: [
-                          Text("Select Workers : "),
-
-                        ],
-                      ),
 
                       SizedBox(
                         height: 15,
@@ -137,9 +218,9 @@ class _AddDayScreenState extends State<AddDayScreen> {
                           children: [
                             isPickedUp
                                 ? Icon(
-                              Icons.done,
-                              color: ColorConstants.mainAppColor,
-                            )
+                                    Icons.done,
+                                    color: ColorConstants.mainAppColor,
+                                  )
                                 : SizedBox.shrink(),
                             InkWell(
                               onTap: () async {
@@ -149,10 +230,10 @@ class _AddDayScreenState extends State<AddDayScreen> {
                                 children: [
                                   isPickedUp
                                       ? Text(
-                                    "(${DateFormat('dd-MM-yyyy').format(selectedDate)})",
-                                    style: AppTextStyle.thinTitle14,
-                                    textAlign: TextAlign.left,
-                                  )
+                                          "(${DateFormat('dd-MM-yyyy').format(selectedDate)})",
+                                          style: AppTextStyle.thinTitle14,
+                                          textAlign: TextAlign.left,
+                                        )
                                       : SizedBox.shrink(),
                                   SizedBox(
                                     width: 4,
@@ -234,12 +315,11 @@ class _AddDayScreenState extends State<AddDayScreen> {
           content: "Your picture is Missing ! \n Please Select a Date ");
     } else {
       try {
-        DBProvider.db.newPerson(Person(
-            salary: int.parse(dataMap["salary"]),
-            firstName: dataMap["firstName"],
-            secondName: dataMap["secondName"],
-            description: dataMap["description"],
-            image: dataMap["image"],
+        DBProvider.db.newDay(Day(
+          note: dataMap["date"],
+          date: selectedDate,
+          projectWork: projectToJson(currentProject),
+          persons: personListToJson(personsList)
         ));
 
         setState(() {
@@ -255,9 +335,7 @@ class _AddDayScreenState extends State<AddDayScreen> {
         });
       } catch (err) {
         showMainDialog(
-            context: context,
-            label: "Warning !",
-            content: err.toString());
+            context: context, label: "Warning !", content: err.toString());
       }
     }
   }

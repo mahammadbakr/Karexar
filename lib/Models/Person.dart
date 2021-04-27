@@ -10,6 +10,14 @@ String personToJson(Person data) {
   return json.encode(dyn);
 }
 
+List<Person> personListFromJson(String data) {
+  return json.decode(data);
+}
+
+String personListToJson(List<Person> data) {
+  return json.encode(data);
+}
+
 class Person {
   int id;
   String firstName;
@@ -40,5 +48,6 @@ class Person {
         "secondName": secondName,
         "salary": salary,
         "image": image,
-        "description": description};
+        "description": description
+      };
 }
